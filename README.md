@@ -6,7 +6,7 @@ This project features a high-fidelity glassmorphic frontend, a robust dual-mode 
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 - **Real-Time Translation**: Interpret hand gestures at up to 30 frames per second using MediaPipe.
 - **Dual Classification Modes**:
@@ -19,7 +19,7 @@ This project features a high-fidelity glassmorphic frontend, a robust dual-mode 
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: HTML5, CSS3 (Vanilla CSS with custom properties), Javascript (Vanilla ES6).
 - **Backend**: Python 3.12, Flask.
@@ -28,7 +28,7 @@ This project features a high-fidelity glassmorphic frontend, a robust dual-mode 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 GestureTalk/
@@ -58,7 +58,7 @@ GestureTalk/
 
 ---
 
-## 🚀 Setup & Installation
+## Setup & Installation
 
 Follow these steps to run GestureTalk locally on your machine.
 
@@ -100,7 +100,7 @@ Open your browser and navigate to **`http://127.0.0.1:5000`**.
 
 ---
 
-## ✊ Supported Gestures
+## Supported Gestures
 
 GestureTalk supports the following 8 gestures out of the box:
 
@@ -117,7 +117,7 @@ GestureTalk supports the following 8 gestures out of the box:
 
 ---
 
-## 🎓 Custom Model Training (Record Your Own Signs!)
+## Custom Model Training (Record Your Own Signs!)
 
 You can train a custom scikit-learn model using your own hand gestures.
 
@@ -147,7 +147,7 @@ The server will detect your custom `model.p` and load it automatically. Select *
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## Keyboard Shortcuts
 
 When in the Recognition Workspace (and not typing inside settings menus), you can use the following shortcuts:
 
@@ -158,7 +158,7 @@ When in the Recognition Workspace (and not typing inside settings menus), you ca
 
 ---
 
-## 🛠️ Project Status & Contributions
+## Project Status & Contributions
 
 > [!NOTE]
 > **GestureTalk is currently in its early phases of active development.** 
