@@ -155,3 +155,18 @@ When in the Recognition Workspace (and not typing inside settings menus), you ca
 - **`Backspace`**: Deletes the last character in the sentence.
 - **`Enter`**: Speaks the entire sentence aloud.
 - **`Escape`**: Clears the entire recognized text.
+
+---
+
+## 🛠️ Project Status & Contributions
+
+> [!NOTE]
+> **GestureTalk is currently in its early phases of active development.** 
+> Core systems (such as heuristic calculations, model interfaces, and keyboard actions) are functional, but we are actively working on expanding sign classes, optimizing tracking robustness, and improving translation flow.
+
+We welcome and encourage community contributions! If you would like to help improve GestureTalk:
+- **Report bugs or suggest features** by opening an issue.
+- **Contribute code changes** by creating a fork, making your edits, and opening a pull request.
+- **Expand the ML gesture library** by sharing custom landmark data frames.
+
+Feel free to jump in and help build the future of accessible sign-to-speech communication!
