@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestureTalk - AI Sign Language Translation</title>
+    <meta name="description" content="A professionally designed real-time sign language interpreter translating hand gestures to text and speech instantly.">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo.png') }}" alt="GestureTalk Logo">
+        </a>
+        
+        <ul class="nav-menu" id="nav-menu">
+            <li class="nav-item active"><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li class="nav-item"><a href="/recognition"><i class="fa-solid fa-camera"></i> Recognition</a></li>
+            <li class="nav-item"><a href="/about"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            <li class="nav-item"><a href="/contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark/light theme">
+                <i class="fa-solid fa-sun" id="theme-sun" style="display: none;"></i>
+                <i class="fa-solid fa-moon" id="theme-moon"></i>
+            </button>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Hero and Landing Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">
+                <i class="fa-solid fa-signal"></i> Real-time computer vision translation active
+            </div>
+            
+            <h1 class="hero-title">
+                Bridging communication gaps with <span>real-time translation</span>.
+            </h1>
+            
+            <p class="hero-subtitle">
+                Translate hand gestures and sign language into spoken word and text instantly. Designed for seamless accessibility, powered by machine learning, and runs entirely in your browser.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="/recognition" class="btn btn-primary">
+                    <i class="fa-solid fa-play"></i> Open Recognition Workspace
+                </a>
+                <a href="/about" class="btn btn-secondary">
+                    <i class="fa-solid fa-circle-info"></i> How it works
+                </a>
+            </div>
+
+            <!-- Abstract Dashboard Mockup Visual -->
+            <div class="hero-visual">
+                <div class="visual-topbar">
+                    <div class="visual-dot" style="background-color: #EF4444;"></div>
+                    <div class="visual-dot" style="background-color: #F59E0B;"></div>
+                    <div class="visual-dot" style="background-color: #10B981;"></div>
+                    <span style="font-size: 0.75rem; color: var(--text-secondary); margin-left: 0.5rem; font-family: monospace;">workspace.gesturetalk.io</span>
+                </div>
+                
+                <div class="visual-mock">
+                    <!-- Clean SVG grid drawing lines instead of cheesy AI imagery -->
+                    <svg class="visual-mock-svg" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Abstract connecting network lines representing hand coordinates -->
+                        <path d="M150,320 L250,220 L350,260 L450,150 L550,240 L650,180" stroke-width="2" stroke-dasharray="5 5"></path>
+                        <circle cx="150" cy="320" r="6" fill="var(--primary)"></circle>
+                        <circle cx="250" cy="220" r="6" fill="var(--secondary)"></circle>
+                        <circle cx="350" cy="260" r="6" fill="var(--primary)"></circle>
+                        <circle cx="450" cy="150" r="6" fill="var(--secondary)"></circle>
+                        <circle cx="550" cy="240" r="6" fill="var(--primary)"></circle>
+                        <circle cx="650" cy="180" r="6" fill="var(--secondary)"></circle>
+                        <line x1="150" y1="320" x2="250" y2="220" stroke-width="1.5"></line>
+                        <line x1="250" y1="220" x2="350" y2="260" stroke-width="1.5"></line>
+                        <line x1="350" y1="260" x2="450" y2="150" stroke-width="1.5"></line>
+                        <line x1="450" y1="150" x2="550" y2="240" stroke-width="1.5"></line>
+                        <line x1="550" y1="240" x2="650" y2="180" stroke-width="1.5"></line>
+                    </svg>
+                    
+                    <div style="z-index: 2; text-align: center; max-width: 400px; padding: 2rem;">
+                        <i class="fa-solid fa-hand-pointer" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">Interactive Recognition Workspace</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Position your hand within the frame to overlay landmark tracking coordinates and generate sentence structures in real time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">An accessibility-first design system</h2>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <h3>Real-Time Prediction</h3>
+                    <p>Powered by MediaPipe landmarks mapping, performing geometric tracking at 30 frames per second directly in the client browser with zero lag.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </div>
+                    <h3>Dual-Speech Engines</h3>
+                    <p>Includes client-side Web Speech API and backend Python speech engines. Instantly convert translated text to verbal speech at the push of a button.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3>Flexible Classification</h3>
+                    <p>Switch between a ready-to-use Heuristic rule-based engine and a Scikit-learn Random Forest model trained on hand coordinates.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-keyboard"></i>
+                    </div>
+                    <h3>Keyboard Shortcuts</h3>
+                    <p>Control translation without mouse actions. Use Enter to speak, Space to add a space, Backspace to delete, and Esc to clear text.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 GestureTalk. Built for university portfolio. Empowering communication through technology.</p>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestureTalk - Sign Recognition Workspace</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MediaPipe CDN Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo.png') }}" alt="GestureTalk Logo">
+        </a>
+        
+        <ul class="nav-menu" id="nav-menu">
+            <li class="nav-item"><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li class="nav-item active"><a href="/recognition"><i class="fa-solid fa-camera"></i> Recognition</a></li>
+            <li class="nav-item"><a href="/about"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            <li class="nav-item"><a href="/contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark/light theme">
+                <i class="fa-solid fa-sun" id="theme-sun" style="display: none;"></i>
+                <i class="fa-solid fa-moon" id="theme-moon"></i>
+            </button>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Workspace Area -->
+    <main>
+        <div class="recognition-container">
+            
+            <!-- COLUMN 1: Gesture Guide -->
+            <div class="glass-card guide-panel">
+                <h3>Gesture Guide</h3>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Hold your hand in front of the camera using these shapes to build a sentence:</p>
+                
+                <div class="guide-list">
+                    <div class="guide-item">
+                        <div class="guide-img-container">✊</div>
+                        <div class="guide-details">
+                            <h4>A</h4>
+                            <p>All fingers closed in a fist.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">✋</div>
+                        <div class="guide-details">
+                            <h4>B</h4>
+                            <p>Open palm vertical & flat.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">🤏</div>
+                        <div class="guide-details">
+                            <h4>C</h4>
+                            <p>Curved palm forming a 'C'.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">☝️</div>
+                        <div class="guide-details">
+                            <h4>L</h4>
+                            <p>Thumb & index open.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">🤙</div>
+                        <div class="guide-details">
+                            <h4>Y</h4>
+                            <p>Thumb & pinky open.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">✌️</div>
+                        <div class="guide-details">
+                            <h4>SPACE</h4>
+                            <p>Index & middle open.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">👍</div>
+                        <div class="guide-details">
+                            <h4>DELETE</h4>
+                            <p>Thumb open (Thumbs up shape).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="guide-img-container">🤘</div>
+                        <div class="guide-details">
+                            <h4>CLEAR</h4>
+                            <p>Index & pinky open.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- COLUMN 2: Live Camera & Sentence Output -->
+            <div class="camera-panel">
+                <div class="video-container">
+                    <video id="webcam" class="video-feed" autoplay playsinline muted></video>
+                    <canvas id="landmarks-canvas" class="landmarks-canvas"></canvas>
+                    
+                    <!-- Minimal Startup Spinner Loader Overlay -->
+                    <div id="loading-overlay" class="loading-overlay">
+                        <div class="spinner"></div>
+                        <span id="loading-text" style="font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);">Initializing local camera stream...</span>
+                    </div>
+                </div>
+                
+                <div class="glass-card sentence-panel">
+                    <span class="sentence-label">Recognized Sentence</span>
+                    <div id="sentence-bubble" class="sentence-bubble">
+                        <span class="sentence-placeholder">Awaiting hand gestures...</span>
+                    </div>
+                    
+                    <div class="sentence-actions">
+                        <button class="btn btn-primary" id="btn-speak">
+                            <i class="fa-solid fa-volume-high"></i> Speak Text
+                        </button>
+                        <button class="btn btn-secondary" id="btn-copy">
+                            <i class="fa-solid fa-copy"></i> Copy Text
+                        </button>
+                        <button class="btn btn-secondary" id="btn-clear" style="color: var(--danger); border-color: rgba(220, 38, 38, 0.15);">
+                            <i class="fa-solid fa-trash-can"></i> Clear Text
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- COLUMN 3: Status & Configuration Controls -->
+            <div class="glass-card status-panel">
+                <div class="status-badge-container">
+                    <span class="sentence-label">Camera Stream</span>
+                    <span id="camera-badge" class="status-badge inactive">
+                        <span class="status-dot"></span>
+                        <span id="camera-status-text">Disconnected</span>
+                    </span>
+                </div>
+                
+                <div class="prediction-card">
+                    <span class="sentence-label">Active Prediction</span>
+                    <div id="predicted-letter" class="prediction-letter">-</div>
+                    
+                    <div class="confidence-container">
+                        <div class="confidence-label">
+                            <span>Confidence</span>
+                            <span id="confidence-percentage">0%</span>
+                        </div>
+                        <div class="confidence-bar-bg">
+                            <div id="confidence-bar" class="confidence-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Controls -->
+                <div class="settings-group">
+                    <span class="sentence-label"><i class="fa-solid fa-sliders"></i> Configuration</span>
+                    
+                    <!-- Classifier Selector -->
+                    <div class="setting-row">
+                        <span>Classification Mode</span>
+                        <select id="classifier-mode" class="select-input">
+                            <option value="heuristic">Heuristic (Built-in)</option>
+                            <option value="ml">Machine Learning</option>
+                        </select>
+                    </div>
+
+                    <!-- TTS Selector -->
+                    <div class="setting-row">
+                        <span>TTS Engine</span>
+                        <select id="tts-engine" class="select-input">
+                            <option value="frontend">Frontend (Browser)</option>
+                            <option value="backend">Backend (Python)</option>
+                        </select>
+                    </div>
+
+                    <!-- Debounce Slider -->
+                    <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 0.3rem;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span>Cooldown Period</span>
+                            <span id="debounce-val">1.5s</span>
+                        </div>
+                        <input type="range" id="debounce-slider" min="0.8" max="3.0" step="0.1" value="1.5" style="width: 100%; accent-color: var(--primary); cursor: pointer;">
+                    </div>
+                </div>
+                
+                <!-- History Log Section -->
+                <div class="history-section">
+                    <span class="sentence-label"><i class="fa-solid fa-clock-rotate-left"></i> History Log</span>
+                    <div class="history-list" id="history-list">
+                        <div class="history-item" style="justify-content: center; font-style: italic;">No entries yet</div>
+                    </div>
+                </div>
+
+                <!-- Keyboard shortcuts -->
+                <div class="settings-group" style="padding-top: 1rem;">
+                    <span class="sentence-label"><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</span>
+                    <ul class="shortcuts-list">
+                        <li><span>Speak Text</span> <kbd class="kbd">Enter</kbd></li>
+                        <li><span>Clear Text</span> <kbd class="kbd">Esc</kbd></li>
+                        <li><span>Add Space</span> <kbd class="kbd">Space</kbd></li>
+                        <li><span>Delete Last</span> <kbd class="kbd">Backspace</kbd></li>
+                    </ul>
+                </div>
+                
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 GestureTalk. Built for university portfolio. Empowering communication through technology.</p>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

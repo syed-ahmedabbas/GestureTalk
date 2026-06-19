@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestureTalk - About & Architecture</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo.png') }}" alt="GestureTalk Logo">
+        </a>
+        
+        <ul class="nav-menu" id="nav-menu">
+            <li class="nav-item"><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li class="nav-item"><a href="/recognition"><i class="fa-solid fa-camera"></i> Recognition</a></li>
+            <li class="nav-item active"><a href="/about"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            <li class="nav-item"><a href="/contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark/light theme">
+                <i class="fa-solid fa-sun" id="theme-sun" style="display: none;"></i>
+                <i class="fa-solid fa-moon" id="theme-moon"></i>
+            </button>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="about-container">
+            
+            <header class="about-header">
+                <h1>System Architecture</h1>
+                <p>Learn how GestureTalk captures, processes, and translates sign language coordinates in real time.</p>
+            </header>
+
+            <!-- Section: System Process Flow -->
+            <section class="glass-card about-section">
+                <h2>Real-Time Pipeline</h2>
+                <p>GestureTalk implements an asynchronous local coordinate streaming design that extracts landmarks frame-by-frame on the client-side GPU, sending structured feature vectors back to the Python classification engine.</p>
+                
+                <div class="process-flow">
+                    <div class="process-step">
+                        <div class="step-num">1</div>
+                        <h4>Camera Stream</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Camera video captures frames in the client canvas at up to 30 frames per second.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-num">2</div>
+                        <h4>Landmark Map</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">MediaPipe tracks hand joints to extract 21 points in coordinates space.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-num">3</div>
+                        <h4>Classification</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">The engine runs heuristics or machine learning class prediction on the hand vector.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-num">4</div>
+                        <h4>Audio Engine</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">The synthesized text is converted to spoken audio via browser or system TTS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Tech Stack -->
+            <section class="glass-card about-section">
+                <h2>Technology Stack</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 0.5rem;">
+                    <div>
+                        <h4 style="color: var(--primary); font-size: 1rem; margin-bottom: 0.5rem;"><i class="fa-brands fa-python"></i> Python Backend</h4>
+                        <ul style="padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.3rem;">
+                            <li>Flask (Micro web server framework)</li>
+                            <li>OpenCV (Local file frames decoding)</li>
+                            <li>MediaPipe (Skeletal landmark engine)</li>
+                            <li>Scikit-Learn (Random Forest model)</li>
+                            <li>Pyttsx3 (Native voice engine fallback)</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--secondary); font-size: 1rem; margin-bottom: 0.5rem;"><i class="fa-brands fa-js"></i> Frontend Client</h4>
+                        <ul style="padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.3rem;">
+                            <li>HTML5 / CSS3 (Inter fonts typography)</li>
+                            <li>Vanilla JS (State machine controller)</li>
+                            <li>Web Speech Synthesis API (Audio output)</li>
+                            <li>Canvas 2D Context API (Draw mapping)</li>
+                            <li>MediaPipe Hands JS CDN (GPU accelerated)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Landmark Index Reference -->
+            <section class="glass-card about-section">
+                <h2>MediaPipe Landmarks Reference</h2>
+                <p>The system normalizes the 21 coordinate landmarks of the hand to ensure scale and distance invariance before feeding the 63-value feature list into the ML classifier.</p>
+                
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; align-items: center; margin-top: 0.5rem;">
+                    <div>
+                        <ul style="font-size: 0.8rem; columns: 2; list-style-position: inside; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.2rem; height: 160px; flex-wrap: wrap;">
+                            <li>0: Wrist</li>
+                            <li>1: Thumb CMC</li>
+                            <li>2: Thumb MCP</li>
+                            <li>3: Thumb IP</li>
+                            <li>4: Thumb Tip</li>
+                            <li>5: Index MCP</li>
+                            <li>6: Index PIP</li>
+                            <li>7: Index DIP</li>
+                            <li>8: Index Tip</li>
+                            <li>9: Middle MCP</li>
+                            <li>10: Middle PIP</li>
+                            <li>11: Middle DIP</li>
+                            <li>12: Middle Tip</li>
+                            <li>13: Ring MCP</li>
+                            <li>14: Ring PIP</li>
+                            <li>15: Ring DIP</li>
+                            <li>16: Ring Tip</li>
+                            <li>17: Pinky MCP</li>
+                            <li>18: Pinky PIP</li>
+                            <li>19: Pinky DIP</li>
+                            <li>20: Pinky Tip</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-md); text-align: center; background-color: var(--bg-primary);">
+                        <i class="fa-solid fa-hand-pointer" style="font-size: 3rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                        <h4 style="font-size: 0.85rem; font-weight: 650; margin-bottom: 0.25rem;">21 Landmark Points</h4>
+                        <p style="font-size: 0.7rem; color: var(--text-secondary);">Normalizes translations based on wrist position (Landmark 0).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Custom Training Guide -->
+            <section class="glass-card about-section">
+                <h2>Custom Model Training Guide</h2>
+                <p>To record custom gestures and train a custom machine learning model on your own dataset, run the following CLI commands inside your terminal:</p>
+                
+                <div style="background-color: var(--bg-primary); border: 1px solid var(--card-border); padding: 1.25rem; border-radius: var(--radius-md); font-family: monospace; font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.75rem; overflow-x: auto; line-height: 1.4;">
+                    <div>
+                        <span style="color: var(--text-secondary);"># 1. Capture frames from webcam for classes 0 to 7</span><br>
+                        <span style="color: var(--primary);">python collect_data.py</span>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-secondary);"># 2. Train the Random Forest Classifier on captured data</span><br>
+                        <span style="color: var(--primary);">python train_model.py</span>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-secondary);"># 3. Restart server (app loads the new model.p automatically)</span><br>
+                        <span style="color: var(--primary);">python app.py</span>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 GestureTalk. Built for university portfolio. Empowering communication through technology.</p>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
